@@ -10,7 +10,7 @@ const Display = () => {
     const [toggle, setToggle] = useState(false)
     const [rowToEdit, setRowTOEdit] = useState(null)
     const [data, setData] = useState([])
-    const [rows, setRows] = useState(JSON.parse(localStorage.getItem("Data1"))||[])
+    const [rows, setRows] = useState(JSON.parse(localStorage.getItem("Data2"))||[])
     const [dataChange, setDataChange] = useState(false);
    
     const itemsPerPage = 6
@@ -20,26 +20,21 @@ const Display = () => {
     const npage = Math.ceil(rows.length / itemsPerPage);
     const numbers = [...Array(npage + 1).keys()].slice(1);
     const url = 'https://api.github.com/repos/octocat/hello-world/issues'
-    useEffect(() => {
-        const fetch = async () => {
-            const res = await axios.get(url)
-            setData(res.data)
-            console.log(res.data)
-        }
-        fetch()
-    }, [])
-    
-    const updateLocalstorage = (data) => {
-        localStorage.setItem('Data1', JSON.stringify(data))
-    }
+    // useEffect(() => {
+    //     const fetch = async () => {
+    //         const res = await axios.get(url)
+    //         setData(res.data)
+    //         localStorage.setItem('Data2', JSON.stringify(res.data))
+    //         console.log(res.data)
+    //     }
+    //     fetch()
+       
+    // }, [])
    
     const addingRow = (newRow) => {
-        const arr = [...data,newRow]
-        setData(arr)
+        const arr = [...rows,newRow]
         setRows(arr)
-        updateLocalstorage(data);
-      
-       
+        localStorage.setItem('Data2', JSON.stringify(arr))
     }
     const prePage = () => {
         if (currentPage !== firstIndex) {
@@ -63,8 +58,10 @@ const Display = () => {
     }, []);
     return (
         <div className="main">
+        
             <div className='title'><h2>Add Your Issuses</h2><button className='add' onClick={() => setToggle(true)}>Add</button></div>
             {toggle && <Form fun={setToggle} addingRow={addingRow} />}
+            
             {items && items.map((x, index) => {
                 return (
                     <div className="main-container-1" key={index}>
@@ -83,7 +80,7 @@ const Display = () => {
                                 </div>
                             </div>
                         </div>
-                        {disComments[x.id] && <Comments commetsUrl={x.comments_url}/>}
+                        {disComments[x.id] && <Comments commetsUrl={x.comments_url} fun={commitChange} id={x.id}/>}
                     </div>
                 )
             })

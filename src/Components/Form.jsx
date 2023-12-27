@@ -9,6 +9,7 @@ const Form = ({addingRow,fun}) => {
     const [data,setData] =useState({
         title:"",
         url:"",
+    
         user:{login:""},
         created_at:"",
         comments:[],
@@ -24,7 +25,7 @@ const Form = ({addingRow,fun}) => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(curr)
+        console.log(data)
         if(validate()){
             addingRow(data)
             console.log(data)
@@ -33,21 +34,35 @@ const Form = ({addingRow,fun}) => {
        
     }
     
-    const handleChange1 =e=>{
-        setData(prev=>({
-            ...prev,
-            user:{login:e.target.value},
-            created_at:curr,
-            updated_at:curr,
-            comments:data.comments.length,
-            id:randomFiveDigitNumber,
-        }))
-    }
+    // const handleChange1 =e=>{
+    //     setData(prev=>({
+    //         ...prev,
+    //         user:{login:e.target.value},
+    //         created_at:curr,
+    //         updated_at:curr,
+    //         comments:data.comments.length,
+    //         id:randomFiveDigitNumber,
+    //     }))
+    // }
     const handleChange = e=>{
+        if(e.target.name==='user'){
+            setData({
+                ...data,
+                user:{login:e.target.value},
+                created_at:curr,
+                        updated_at:curr,
+                        // comments:data.comments.length,
+                        id:randomFiveDigitNumber,
+                
+            })
+        }else{
             setData({
                 ...data,
                 [e.target.name]:e.target.value, 
-            })    
+            }) 
+        }
+       
+              
     }
     const validate =e=>{
         if(data.title && data.url && data.user.login){
@@ -81,7 +96,7 @@ const Form = ({addingRow,fun}) => {
                     </div>
                     <div className='block'>
                         <label>Name</label>
-                        <input type='text' placeholder='Name' name='user' onChange={handleChange1}/>
+                        <input type='text' placeholder='Name' name='user' onChange={handleChange}/>
                     </div>
                     <div><button className='btn'>Submit</button></div>
                 </form>
